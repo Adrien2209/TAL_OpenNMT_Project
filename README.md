@@ -219,3 +219,116 @@ Score BLEU : `81.19`
 
 Le modèle de traduction s'est amélioré sur un corpus du même domaine mais n'est pas encore totalement au point. Par contre sur un corpus hors-domaine, celui-ci est très performant.
 
+# Evaluation sur des corpus parallèles en lemmes à large échelle
+
+## Lemmatisation des corpus
+
+Nous avons créé deux scripts python pour lemmatizer les fichiers en anglais et en français, ceux-ci sont disponibles dans le dossier src.
+
+```
+python src/lemmatize_english_text.py input_file output_file
+```
+
+```
+python src/lemmatize_french_text.py input_file output_file
+```
+
+Lemmatisation des corpus en anglais :
+```
+python src/lemmatize_english_text.py data/EuroparlEMEA/EuroparlSimple/Europarl_train_100k.tok.true.clean.en data/EuroparlEMEA/EuroparlSimple/Europarl_train_100k_lemmatized.en
+python src/lemmatize_english_text.py data/EuroparlEMEA/EuroparlSimple/Europarl_dev_3750.tok.true.clean.en data/EuroparlEMEA/EuroparlSimple/Europarl_dev_3750_lemmatized.en
+python src/lemmatize_english_text.py data/EuroparlEMEA/EuroparlSimple/Europarl_test_500.tok.true.clean.en data/EuroparlEMEA/EuroparlSimple/Europarl_test_500_lemmatized.en
+python src/lemmatize_english_text.py data/EuroparlEMEA/EuroparlEmea/Emea_train_10k.tok.true.clean.en data/EuroparlEMEA/EuroparlEmea/Emea_train_10k_lemmatized.en
+python src/lemmatize_english_text.py data/EuroparlEMEA/EuroparlEmea/Emea_test_500.tok.true.clean.en data/EuroparlEMEA/EuroparlEmea/Emea_test_500_lemmatized.en
+```
+Lemmatisation des corpus en français :
+```
+python src/lemmatize_french_text.py data/EuroparlEMEA/EuroparlSimple/Europarl_train_100k.tok.true.clean.fr data/EuroparlEMEA/EuroparlSimple/Europarl_train_100k_lemmatized.fr
+python src/lemmatize_french_text.py data/EuroparlEMEA/EuroparlSimple/Europarl_dev_3750.tok.true.clean.fr data/EuroparlEMEA/EuroparlSimple/Europarl_dev_3750_lemmatized.fr
+python src/lemmatize_french_text.py data/EuroparlEMEA/EuroparlSimple/Europarl_test_500.tok.true.clean.fr data/EuroparlEMEA/EuroparlSimple/Europarl_test_500_lemmatized.fr
+python src/lemmatize_french_text.py data/EuroparlEMEA/EuroparlEmea/Emea_train_10k.tok.true.clean.fr data/EuroparlEMEA/EuroparlEmea/Emea_train_10k_lemmatized.fr
+python src/lemmatize_french_text.py data/EuroparlEMEA/EuroparlEmea/Emea_test_500.tok.true.clean.fr data/EuroparlEMEA/EuroparlEmea/Emea_test_500_lemmatized.fr
+```
+#### Step 1 : Prepare the data
+
+On commence avec la run n°2 en utilisant le corpus Europarl_train_100K ainsi que le corpus Emea_train_10k pour l’apprentissage et le corpus Europarl_dev_3750 pour le tuning. On utilise le fichier de configuration créé au préalable Europarl_run2_flechie.yaml.
+
+```
+onmt_build_vocab -config Europarl_run1_lemme.yaml -n_sample 100000
+```
+
+```
+onmt_build_vocab -config Europarl_run2_lemme.yaml -n_sample 100000
+```
+
+#### Step 2 : Train the model
+
+```
+onmt_train -config Europarl_run1_lemme.yaml
+```
+
+```
+onmt_train -config Europarl_run2_lemme.yaml
+```
+
+#### Step 3 : Translate
+
+#### Run n°1
+
+Traduction dans le même domaine
+
+```
+onmt_translate -model data/EuroparlEMEA/EuroparlSimple/run_1_lemme/model_step_7500.pt -src data/EuroparlEMEA/EuroparlSimple/Europarl_test_500_lemmatized.en -output data/EuroparlEMEA/EuroparlSimple/run_1_lemme/pred_domaine.txt -verbose
+```
+
+Calcul du score BLEU pour le corpus du domaine :
+
+```
+perl multi-bleu.perl data/EuroparlEMEA/EuroparlSimple/Europarl_test_500_lemmatized.fr < data/EuroparlEMEA/EuroparlSimple/run_1_lemme/pred_domaine.txt
+```
+
+Score BLEU : `24.49`
+
+Traduction hors domaine
+
+```
+onmt_translate -model data/EuroparlEMEA/EuroparlSimple/run_1_lemme/model_step_10000.pt -src data/EuroparlEMEA/EuroparlEmea/Emea_test_500_lemmatized.en -output data/EuroparlEMEA/EuroparlSimple/run_1_lemme/pred_hors_domaine.txt -verbose
+```
+
+Calcul du score BLEU pour le corpus hors domaine :
+
+```
+perl multi-bleu.perl data/EuroparlEMEA/EuroparlEmea/Emea_test_500_lemmatized.fr < data/EuroparlEMEA/EuroparlSimple/run_1_lemme/pred_hors_domaine.txt
+```
+
+Score BLEU : `0.21`
+
+#### Run n°2
+
+Traduction dans le même domaine
+
+```
+onmt_translate -model data/EuroparlEMEA/EuroparlEmea/run_2_lemme/model_step_10000.pt -src data/EuroparlEMEA/EuroparlSimple/Europarl_test_500_lemmatized.en -output data/EuroparlEMEA/EuroparlEmea/run_2_lemme/pred_domaine.txt -verbose
+```
+
+Calcul du score BLEU pour le corpus du domaine :
+
+```
+perl multi-bleu.perl data/EuroparlEMEA/EuroparlSimple/Europarl_test_500_lemmatized.fr < data/EuroparlEMEA/EuroparlEmea/run_2_flechie/pred_domaine.txt
+```
+
+Score BLEU : ``
+
+Traduction hors domaine
+
+```
+onmt_translate -model data/EuroparlEMEA/EuroparlEmea/run_2_lemme/model_step_10000.pt -src data/EuroparlEMEA/EuroparlEmea/Emea_test_500_lemmatized.en -output data/EuroparlEMEA/EuroparlEmea/run_2_lemme/pred_hors_domaine.txt -verbose
+```
+
+Calcul du score BLEU pour le corpus hors domaine :
+
+```
+perl multi-bleu.perl data/EuroparlEMEA/EuroparlEmea/Emea_test_500_lemmatized.fr < data/EuroparlEMEA/EuroparlEmea/run_2_lemme/pred_hors_domaine.txt
+```
+
+Score BLEU : ``
