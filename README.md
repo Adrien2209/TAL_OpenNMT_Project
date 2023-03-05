@@ -31,7 +31,7 @@ Afin de calculer le score BLEU, nous utilisons un fichier que nous avons importe
 Nous utilisons la commande suivante pour obtenir le score BLEU :
 
 ```
-perl multi-bleu.perl data\toy-ende\tgt-test.txt < \data\toy-ende\pred_1000.txt
+perl multi-bleu.perl data\toy-ende\tgt-test.txt < data\toy-ende\pred_1000.txt
 ```
 
 Nous obtenons un score BLEU de `0.00`, ce qui est extrêmement faible. Un score BLEU peut être interpreté de cette façon :
@@ -122,3 +122,100 @@ Nous allons effectuer deux runs en suivant ce tableau :
 | --- | --- | --- |
 | 1 | 100K (Europarl) | 3,75K (Europarl) |
 | 2 | 100K+10K (Europarl + EMEA) | 3,75K (Europarl) |
+
+### Run n°1
+
+#### Step 1 : Prepare the data
+
+On commence avec la run n°1 en utilisant le corpus Europarl_train_100K pour l’apprentissage et le corpus Europarl_dev_3750 pour le tuning. On utilise le fichier de configuration créé au préalable Europarl_run1_flechie.yaml.
+
+```
+onmt_build_vocab -config Europarl_run1_flechie.yaml -n_sample 100000
+```
+
+#### Step 2 : Train the model
+
+```
+onmt_train -config Europarl_run1_flechie.yaml
+```
+
+#### Step 3 : Translate
+
+Traduction dans le même domaine
+
+```
+onmt_translate -model data/EuroparlEMEA/EuroparlSimple/run_1_flechie/model_step_7500.pt -src data/EuroparlEMEA/EuroparlSimple/Europarl_test_500.tok.true.clean.en -output data/EuroparlEMEA/EuroparlSimple/run_1_flechie/pred_domaine.txt -verbose
+```
+
+Calcul du score BLEU pour le corpus du domaine :
+
+```
+perl multi-bleu.perl data/EuroparlEMEA/EuroparlSimple/Europarl_test_500.tok.true.clean.fr < data/EuroparlEMEA/EuroparlSimple/run_1_flechie/pred_domaine.txt
+```
+
+Score BLEU : `18.01`
+
+Traduction hors domaine
+
+```
+onmt_translate -model data/EuroparlEMEA/EuroparlSimple/run_1_flechie/model_step_7500.pt -src data/EuroparlEMEA/EuroparlEmea/Emea_test_500.tok.true.clean.en -output data/EuroparlEMEA/EuroparlSimple/run_1_flechie/pred_hors_domaine.txt -verbose
+```
+
+Calcul du score BLEU pour le corpus hors domaine :
+
+```
+perl multi-bleu.perl data/EuroparlEMEA/EuroparlEmea/Emea_test_500.tok.true.clean.fr < data/EuroparlEMEA/EuroparlSimple/run_1_flechie/pred_hors_domaine.txt
+```
+
+Score BLEU : `0.00`
+
+Le modèle de traduction est convenable sur des corpus du même domaine mais catastrophique sur des corpus de domaines différents.
+
+### Run n°2
+
+#### Step 1 : Prepare the data
+
+On commence avec la run n°2 en utilisant le corpus Europarl_train_100K ainsi que le corpus Emea_train_10k pour l’apprentissage et le corpus Europarl_dev_3750 pour le tuning. On utilise le fichier de configuration créé au préalable Europarl_run2_flechie.yaml.
+
+```
+onmt_build_vocab -config Europarl_run2_flechie.yaml -n_sample 100000
+```
+
+#### Step 2 : Train the model
+
+```
+onmt_train -config Europarl_run2_flechie.yaml
+```
+
+#### Step 3 : Translate
+
+Traduction dans le même domaine
+
+```
+onmt_translate -model data/EuroparlEMEA/EuroparlEmea/run_2_flechie/model_step_10000.pt -src data/EuroparlEMEA/EuroparlSimple/Europarl_test_500.tok.true.clean.en -output data/EuroparlEMEA/EuroparlEmea/run_2_flechie/pred_domaine.txt -verbose
+```
+
+Calcul du score BLEU pour le corpus du domaine :
+
+```
+perl multi-bleu.perl data/EuroparlEMEA/EuroparlSimple/Europarl_test_500.tok.true.clean.fr < data/EuroparlEMEA/EuroparlEmea/run_2_flechie/pred_domaine.txt
+```
+
+Score BLEU : `20.12`
+
+Traduction hors domaine
+
+```
+onmt_translate -model data/EuroparlEMEA/EuroparlEmea/run_2_flechie/model_step_10000.pt -src data/EuroparlEMEA/EuroparlEmea/Emea_test_500.tok.true.clean.en -output data/EuroparlEMEA/EuroparlEmea/run_2_flechie/pred_hors_domaine.txt -verbose
+```
+
+Calcul du score BLEU pour le corpus hors domaine :
+
+```
+perl multi-bleu.perl data/EuroparlEMEA/EuroparlEmea/Emea_test_500.tok.true.clean.fr < data/EuroparlEMEA/EuroparlEmea/run_2_flechie/pred_hors_domaine.txt
+```
+
+Score BLEU : `81.19`
+
+Le modèle de traduction s'est amélioré sur un corpus du même domaine mais n'est pas encore totalement au point. Par contre sur un corpus hors-domaine, celui-ci est très performant.
+
