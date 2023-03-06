@@ -1,33 +1,33 @@
 # Europarl100k.yaml
 
 ## Where the samples will be written
-save_data: EuroparlEMEA/EuroparlSimple/run_1_flechie/example
+save_data: data/EuroparlEMEA/EuroparlSimple/run_1_flechie/example
 ## Where the vocab(s) will be written
-src_vocab: EuroparlEMEA/EuroparlSimple/run_1_flechie/example.vocab.src
-tgt_vocab: EuroparlEMEA/EuroparlSimple/run_1_flechie/example.vocab.tgt
+src_vocab: data/EuroparlEMEA/EuroparlSimple/run_1_flechie/example.vocab.src
+tgt_vocab: data/EuroparlEMEA/EuroparlSimple/run_1_flechie/example.vocab.tgt
 # Prevent overwriting existing files in the folder
 overwrite: False
 
 # Corpus opts:
 data:
     corpus_1:
-        path_src: EuroparlEMEA/EuroparlSimple/Europarl_train_100k.tok.true.clean.en
-        path_tgt: EuroparlEMEA/EuroparlSimple/Europarl_train_100k.tok.true.clean.fr
+        path_src: data/EuroparlEMEA/EuroparlSimple/Europarl_train_100k.tok.true.clean.en
+        path_tgt: data/EuroparlEMEA/EuroparlSimple/Europarl_train_100k.tok.true.clean.fr
     valid:
-        path_src: EuroparlEMEA/EuroparlSimple/Europarl_dev_3750.tok.true.clean.en
-        path_tgt: EuroparlEMEA/EuroparlSimple/Europarl_dev_3750.tok.true.clean.fr
+        path_src: data/EuroparlEMEA/EuroparlSimple/Europarl_dev_3750.tok.true.clean.en
+        path_tgt: data/EuroparlEMEA/EuroparlSimple/Europarl_dev_3750.tok.true.clean.fr
 
 
 # Vocabulary files that were just created
-src_vocab: EuroparlEMEA/EuroparlSimple/run_1_flechie/example.vocab.src
-tgt_vocab: EuroparlEMEA/EuroparlSimple/run_1_flechie/example.vocab.tgt
+src_vocab: data/EuroparlEMEA/EuroparlSimple/run_1_flechie/example.vocab.src
+tgt_vocab: data/EuroparlEMEA/EuroparlSimple/run_1_flechie/example.vocab.tgt
 
 # Train on a single GPU
 world_size: 1
 gpu_ranks: [0]
 
 # Where to save the checkpoints
-save_model: EuroparlEMEA/EuroparlSimple/run_1_flechie/model
+save_model: data/EuroparlEMEA/EuroparlSimple/run_1_flechie/model
 save_checkpoint_steps: 2500
 train_steps: 10000
 valid_steps: 2500
