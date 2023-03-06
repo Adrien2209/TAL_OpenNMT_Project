@@ -1,33 +1,33 @@
 # toy_en_de.yaml
 
 ## Where the samples will be written
-save_data: Europarl_test/run/example
+save_data: data/Europarl_test/run/example
 ## Where the vocab(s) will be written
-src_vocab: Europarl_test/run/example.vocab.src
-tgt_vocab: Europarl_test/run/example.vocab.tgt
+src_vocab: data/Europarl_test/run/example.vocab.src
+tgt_vocab: data/Europarl_test/run/example.vocab.tgt
 # Prevent overwriting existing files in the folder
 overwrite: False
 
 # Corpus opts:
 data:
     corpus_1:
-        path_src: Europarl_test/Europarl_train_10k.en
-        path_tgt: Europarl_test/Europarl_train_10k.fr
+        path_src: data/Europarl_test/Europarl_train_10k.en
+        path_tgt: data/Europarl_test/Europarl_train_10k.fr
     valid:
-        path_src: Europarl_test/Europarl_dev_1k.en
-        path_tgt: Europarl_test/Europarl_dev_1k.fr
+        path_src: data/Europarl_test/Europarl_dev_1k.en
+        path_tgt: data/Europarl_test/Europarl_dev_1k.fr
 
 
 # Vocabulary files that were just created
-src_vocab: Europarl_test/run/example.vocab.src
-tgt_vocab: Europarl_test/run/example.vocab.tgt
+src_vocab: data/Europarl_test/run/example.vocab.src
+tgt_vocab: data/Europarl_test/run/example.vocab.tgt
 
 # Train on a single GPU
 world_size: 1
 gpu_ranks: [0]
 
 # Where to save the checkpoints
-save_model: Europarl_test/run/model
+save_model: data/Europarl_test/run/model
 save_checkpoint_steps: 500
 train_steps: 1000
 valid_steps: 500
