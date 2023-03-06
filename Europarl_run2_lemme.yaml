@@ -1,36 +1,36 @@
 # EuroparlEMEA.yaml
 
 ## Where the samples will be written
-save_data: EuroparlEMEA/EuroparlEmea/run_2_lemme/example
+save_data: data/EuroparlEMEA/EuroparlEmea/run_2_lemme/example
 ## Where the vocab(s) will be written
-src_vocab: EuroparlEMEA/EuroparlEmea/run_2_lemme/example.vocab.src
-tgt_vocab: EuroparlEMEA/EuroparlEmea/run_2_lemme/example.vocab.tgt
+src_vocab: data/EuroparlEMEA/EuroparlEmea/run_2_lemme/example.vocab.src
+tgt_vocab: data/EuroparlEMEA/EuroparlEmea/run_2_lemme/example.vocab.tgt
 # Prevent overwriting existing files in the folder
 overwrite: False
 
 # Corpus opts:
 data:
     corpus_1:
-        path_src: EuroparlEMEA/EuroparlSimple/Europarl_train_100k_lemmatized.en
-        path_tgt: EuroparlEMEA/EuroparlSimple/Europarl_train_100k_lemmatized.fr
+        path_src: data/EuroparlEMEA/EuroparlSimple/Europarl_train_100k_lemmatized.en
+        path_tgt: data/EuroparlEMEA/EuroparlSimple/Europarl_train_100k_lemmatized.fr
     corpus_2:
-        path_src: EuroparlEMEA/EuroparlEmea/Emea_train_10k_lemmatized.en
-        path_tgt: EuroparlEMEA/EuroparlEmea/Emea_train_10k_lemmatized.fr
+        path_src: data/EuroparlEMEA/EuroparlEmea/Emea_train_10k_lemmatized.en
+        path_tgt: data/EuroparlEMEA/EuroparlEmea/Emea_train_10k_lemmatized.fr
     valid:
-        path_src: EuroparlEMEA/EuroparlSimple/Europarl_dev_3750_lemmatized.en
-        path_tgt: EuroparlEMEA/EuroparlSimple/Europarl_dev_3750_lemmatized.fr
+        path_src: data/EuroparlEMEA/EuroparlSimple/Europarl_dev_3750_lemmatized.en
+        path_tgt: data/EuroparlEMEA/EuroparlSimple/Europarl_dev_3750_lemmatized.fr
 
 
 # Vocabulary files that were just created
-src_vocab: EuroparlEMEA/EuroparlEmea/run_2_lemme/example.vocab.src
-tgt_vocab: EuroparlEMEA/EuroparlEmea/run_2_lemme/example.vocab.tgt
+src_vocab: data/EuroparlEMEA/EuroparlEmea/run_2_lemme/example.vocab.src
+tgt_vocab: data/EuroparlEMEA/EuroparlEmea/run_2_lemme/example.vocab.tgt
 
 # Train on a single GPU
 world_size: 1
 gpu_ranks: [0]
 
 # Where to save the checkpoints
-save_model: EuroparlEMEA/EuroparlEmea/run_2_lemme/model
+save_model: data/EuroparlEMEA/EuroparlEmea/run_2_lemme/model
 save_checkpoint_steps: 2500
 train_steps: 10000
 valid_steps: 2500
