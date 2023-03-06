@@ -317,7 +317,7 @@ Calcul du score BLEU pour le corpus du domaine :
 perl multi-bleu.perl data/EuroparlEMEA/EuroparlSimple/Europarl_test_500_lemmatized.fr < data/EuroparlEMEA/EuroparlEmea/run_2_flechie/pred_domaine.txt
 ```
 
-Score BLEU : ``
+Score BLEU : `12.72`
 
 Traduction hors domaine
 
@@ -331,4 +331,4 @@ Calcul du score BLEU pour le corpus hors domaine :
 perl multi-bleu.perl data/EuroparlEMEA/EuroparlEmea/Emea_test_500_lemmatized.fr < data/EuroparlEMEA/EuroparlEmea/run_2_lemme/pred_hors_domaine.txt
 ```
 
-Score BLEU : ``
+Score BLEU : `49.52`
